@@ -35,25 +35,26 @@ class MultilayerPerceptron:
 
 
     def fit(self, X, y, epochs=EPOCHS):
-        # feedforward
-        layer1 = X.dot(self.weights1) + self.bias1
-        activation1 = sigmoid(layer1)
-        layer2 = activation1.dot(self.weights2) + self.bias2
-        activation2 = sigmoid(layer2)
-  
-        # backpropagation
-        error = activation2 - y # y = expected output
-        d_weights2 = activation1.T.dot(error * sigmoid_derivative(layer2))
-        d_bias2 = np.sum(error * sigmoid_derivative(layer2), axis=0, keepdims=True)
-        error_hidden = error.dot(self.weights2.T) * sigmoid_derivative(layer1)
-        d_weights1 = X.T.dot(error_hidden)
-        d_bias1 = np.sum(error_hidden, axis=0, keepdims=True)
+        for epoch in range(EPOCHS):
+            # feedforward
+            layer1 = X.dot(self.weights1) + self.bias1
+            activation1 = sigmoid(layer1)
+            layer2 = activation1.dot(self.weights2) + self.bias2
+            activation2 = sigmoid(layer2)
+    
+            # backpropagation
+            error = activation2 - y # y = expected output
+            d_weights2 = activation1.T.dot(error * sigmoid_derivative(layer2))
+            d_bias2 = np.sum(error * sigmoid_derivative(layer2), axis=0, keepdims=True)
+            error_hidden = error.dot(self.weights2.T) * sigmoid_derivative(layer1)
+            d_weights1 = X.T.dot(error_hidden)
+            d_bias1 = np.sum(error_hidden, axis=0, keepdims=True)
 
-        # update weights and biases
-        self.weights2 -= self.learning_rate * d_weights2
-        self.bias2 -= self.learning_rate * d_bias2
-        self.weights1 -= self.learning_rate * d_weights1
-        self.bias1 -= self.learning_rate * d_bias1
+            # update weights and biases
+            self.weights2 -= self.learning_rate * d_weights2
+            self.bias2 -= self.learning_rate * d_bias2
+            self.weights1 -= self.learning_rate * d_weights1
+            self.bias1 -= self.learning_rate * d_bias1
 
     def train(self):
         iris_dataset = datasets.load_iris()
