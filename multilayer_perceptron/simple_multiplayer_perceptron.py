@@ -15,6 +15,26 @@ def sigmoid_derivative(x):
     return sigmoid(x) * (1 - sigmoid(x))
 
 class MultilayerPerceptron:
+    """
+
+    Simple implementation of a Multilayer Perceptron (MLP) that learns the logic operation AND.
+
+    This MLP consists of an input layer with two neurons (x1 and x2), a single hidden layer with two neurons,
+    and an output layer with one neuron. It is trained to perform the logic operation AND on binary inputs.
+
+    Attributes:
+    - learning_rate (float): The learning rate used during weight updates.
+    - w11, w12, w21, w22, w3, w4 (float): Weights associated with the connections between neurons.
+    - b1, b2, b3 (float): Biases associated with the neurons.
+
+    Methods:
+    - forward(X, y): Performs forward propagation given input values X and target output y.
+    - backpropagation(X, y): Performs backpropagation to update weights and biases.
+    - fit(X, y): Fits the model to the provided input-output pair (X, y).
+    - train(batch, epochs): Trains the model on a batch of input-output pairs for a specified number of epochs.
+    - prediction(data): Predicts the output for a given input data and prints the prediction and loss.
+
+    """
     def __init__(self, learning_rate=0.01):
         self.learning_rate = learning_rate
 
@@ -56,17 +76,17 @@ class MultilayerPerceptron:
         self.d_w3 = self.d_z3 * self.a1
         self.d_w4 = self.d_z3 * self.a2
 
-        self.d_a1 = self.d_z3 * self.w3
-        self.d_z1 = self.d_a1 * sigmoid_derivative(self.z1)
-        self.d_w11 = self.d_z1 * self.x1
-        self.d_w12 = self.d_z1 * self.x2
-        self.d_b1 = self.d_z1 * 1
-
         self.d_a2 = self.d_z3 * self.w4
         self.d_z2 = self.d_a2 * sigmoid_derivative(self.z2)
         self.d_w21 = self.d_z2 * self.x1
         self.d_w22 = self.d_z2 * self.x2
         self.d_b2 = self.d_z2 * 1
+
+        self.d_a1 = self.d_z3 * self.w3
+        self.d_z1 = self.d_a1 * sigmoid_derivative(self.z1)
+        self.d_w11 = self.d_z1 * self.x1
+        self.d_w12 = self.d_z1 * self.x2
+        self.d_b1 = self.d_z1 * 1
 
     def update_weights_and_biases(self):
         self.w11 -= self.learning_rate * self.d_w11
