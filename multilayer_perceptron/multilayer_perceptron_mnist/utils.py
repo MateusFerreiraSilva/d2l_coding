@@ -42,10 +42,13 @@ def relu(z):
 def relu_derivative(z):
     return np.where(z > 0.0, 1.0, 0.0)
 
-def softmax(z):
-    exp_values = np.exp(z - np.max(z, axis=-1, keepdims=True))
+def naive_softmax(z):
+    s = np.exp(z)
+    return s / s.sum()
 
-    return exp_values / np.sum(exp_values, axis=-1, keepdims=True)
+
+def softmax(z):
+    return naive_softmax(z - max(z))
 
 # def softmax_derivative(z):
 #     s = softmax(z)

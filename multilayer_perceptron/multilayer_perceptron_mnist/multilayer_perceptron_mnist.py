@@ -1,4 +1,4 @@
-import numpy as np
+from timeit import default_timer as timer
 
 import constants
 import utils
@@ -43,15 +43,22 @@ class MultilayerPerceptron:
         return loss
 
     def train(self, train_imgs, train_labels, epochs=constants.EPOCHS):
+
         print('Training...\n')
         total_loss = None
         for i in range(epochs):
             total_loss = 0.0
+            start = timer()
             for img, label in zip(train_imgs, train_labels):
                 vectorized_label = utils.vectorize_label(label)
                 loss = self.fit(img, vectorized_label)
                 total_loss += loss
-            print(f'[epoch: {i + 1}] [loss: {total_loss}]')
+            end = timer()
+            time_in_seconds = end - start
+            print(f'[epoch: {i + 1}] [loss: {total_loss}] [seconds: {time_in_seconds:.2f}]')
 
         print('Training finished!\n')
 
+
+    def predict(self, x):
+        return self.forward(x).argmax()

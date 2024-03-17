@@ -1,11 +1,12 @@
 import numpy as np
+import cupy
 
 import utils
 import constants
 
 class Layer:
     def __init__(self, input_size, output_size, is_first_layer=False, is_last_layer=False, learning_rate=constants.LEARNING_RATE):
-        self.weights = np.random.randn(input_size, output_size)
+        self.weights = np.random.rand(input_size, output_size)
         self.biases = np.zeros((1, output_size), dtype=float)
         self.is_first_layer = is_first_layer
         self.is_last_layer = is_last_layer
@@ -15,7 +16,7 @@ class Layer:
         self.a = None
 
     def forward(self, x):
-        self.z = np.dot(x, self.weights) + self.biases
+        self.z = cupy.dot(x, self.weights) + self.biases
         if self.is_last_layer:
             self.a = utils.softmax(self.z)
         else:
@@ -32,12 +33,12 @@ class Layer:
             self.d_a = successor_layer.d_z.dot(successor_layer.weights.T)
             self.d_z = self.d_a * utils.relu_derivative(self.z)
 
-        self.d_b = np.sum(self.d_z, axis=0)
+        self.d_b = cupy.sum(self.d_z, axis=0)
 
         if self.is_first_layer:
-            self.d_w = x.T.dot(self.d_z)
+            self.d_w = cupy.dot(x.T, self.d_z)
         else:
-            self.d_w = previous_layer.a.T.dot(self.d_z)
+            self.d_w = cupy.dot(previous_layer.a.T, self.d_z)
     
     def update_weights_and_biases(self):
         self.weights -= self.learning_rate * self.d_w
