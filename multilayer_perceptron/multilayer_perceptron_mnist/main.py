@@ -14,8 +14,8 @@ test_imgs, test_labels = (np.array(d[0:SAMPLE_SIZE]) for d in test_data)
 train_imgs = np.array([img.flatten() for img in train_imgs])
 test_imgs = np.array([img.flatten() for img in test_imgs])
 
-train_imgs = np.array([img.reshape(1, len(img)) / IMG_MAX_VALUE  for img in train_imgs])
-test_imgs = np.array([img.reshape(1, len(img)) / IMG_MAX_VALUE for img in test_imgs])
+train_imgs = np.array([img.reshape(1, len(img))  for img in train_imgs])
+test_imgs = np.array([img.reshape(1, len(img)) for img in test_imgs])
 
 # end of data preparation
 

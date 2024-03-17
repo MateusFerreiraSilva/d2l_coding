@@ -28,6 +28,7 @@ class Layer:
         if self.is_last_layer:
             # self.d_a = utils.categorical_crossentropy_derivative(self.a, y)
             # self.d_z = self.d_a * utils.softmax_derivative(self.z.T)
+
             self.d_z = utils.delta_cross_entropy(self.a, y)
         else:
             self.d_a = successor_layer.d_z.dot(successor_layer.weights.T)

@@ -8,9 +8,9 @@ class MultilayerPerceptron:
     def __init__(self):
         self.layers = [
             Layer(constants.INPUT_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE, is_first_layer=True),
+            Layer(constants.HIDDEN_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE),
             Layer(constants.HIDDEN_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE // 2),
-            Layer(constants.HIDDEN_LAYER_SIZE // 2, constants.HIDDEN_LAYER_SIZE // 2 * 2),
-            Layer(constants.HIDDEN_LAYER_SIZE // 2 * 2, constants.OUTPUT_LAYER_SIZE, is_last_layer=True)
+            Layer(constants.HIDDEN_LAYER_SIZE // 2, constants.OUTPUT_LAYER_SIZE, is_last_layer=True)
         ]
 
     def forward(self, x):
