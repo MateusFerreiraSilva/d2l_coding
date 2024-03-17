@@ -17,20 +17,28 @@ class MultilayerPerceptron:
         for layer in self.layers:
             layer_input = layer.forward(layer_input)
 
-    def backpropagation(self, x, y):
-        pass
+        return layer_input # last layer output
 
-    def update_weights_and_biases(self, gradients):
-        pass
+    def backpropagation(self, x, y):
+        for i in range(len(self.layers) - 1, -1, -1):
+            layer = self.layers[i]
+            previous_layer = None if layer.is_first_layer else self.layers[i - 1]
+            successor_layer = None if layer.is_last_layer else self.layers[i + 1]
+
+            layer.backward(x, y, previous_layer=previous_layer, successor_layer=successor_layer)
+
+    def update_weights_and_biases(self):
+        for layer in self.layers:
+            layer.update_weights_and_biases()
 
     def fit(self, x, y):
         predicted = self.forward(x)
 
-        gradients = self.backpropagation(x, y)
+        self.backpropagation(x, y)
 
-        self.update_weights_and_biases(gradients)
+        self.update_weights_and_biases()
 
-        loss = utils.mse_loss(predicted, y)
+        loss = utils.categorical_crossentropy(predicted, y)
 
         return loss
 
@@ -40,8 +48,8 @@ class MultilayerPerceptron:
         for i in range(epochs):
             total_loss = 0.0
             for img, label in zip(train_imgs, train_labels):
-                label_arr = utils.get_label_as_array(label)
-                loss = self.fit(img, label_arr)
+                vectorized_label = utils.vectorize_label(label)
+                loss = self.fit(img, vectorized_label)
                 total_loss += loss
             print(f'[epoch: {i + 1}] [loss: {total_loss}]')
 
