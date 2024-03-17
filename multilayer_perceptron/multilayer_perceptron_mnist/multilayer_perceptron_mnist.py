@@ -8,8 +8,9 @@ class MultilayerPerceptron:
     def __init__(self):
         self.layers = [
             Layer(constants.INPUT_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE, is_first_layer=True),
-            Layer(constants.HIDDEN_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE),
-            Layer(constants.HIDDEN_LAYER_SIZE, constants.OUTPUT_LAYER_SIZE, is_last_layer=True)
+            Layer(constants.HIDDEN_LAYER_SIZE, constants.HIDDEN_LAYER_SIZE // 2),
+            Layer(constants.HIDDEN_LAYER_SIZE // 2, constants.HIDDEN_LAYER_SIZE // 2 * 2),
+            Layer(constants.HIDDEN_LAYER_SIZE // 2 * 2, constants.OUTPUT_LAYER_SIZE, is_last_layer=True)
         ]
 
     def forward(self, x):
@@ -55,7 +56,7 @@ class MultilayerPerceptron:
                 total_loss += loss
             end = timer()
             time_in_seconds = end - start
-            print(f'[epoch: {i + 1}] [loss: {total_loss}] [seconds: {time_in_seconds:.2f}]')
+            print(f'[epoch: {i + 1}] [loss: {total_loss / len(train_imgs)}] [seconds: {time_in_seconds:.2f}]')
 
         print('Training finished!\n')
 
